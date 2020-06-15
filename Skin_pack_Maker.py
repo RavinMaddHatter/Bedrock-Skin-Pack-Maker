@@ -3,8 +3,9 @@ import uuid
 import os
 from shutil import copyfile
 from zipfile import ZipFile
-
+import random
 from tkinter import *
+import string
 from tkinter import ttk
 from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import askdirectory
@@ -39,6 +40,7 @@ class skinDialog:
         self.top.destroy()
 class mainWindow:
     def __init__(self,master):
+        self.PackLanName=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
         self.skins=[]
         self.LangPack=[]
         self.master=master
@@ -126,7 +128,7 @@ class mainWindow:
             skins["geometry"]= "skinpacks/skins.json"
             skins["skins"]= self.skins
             skins["serialize_name"]= "name"
-            skins["localization_name"]= "SSP"
+            skins["localization_name"]= self.PackLanName
             with open(os.path.join(self.workingDir.get(),'manifest.json'), 'w+') as outfile:
                 json.dump(manifest,outfile,indent=4)
             with open(os.path.join(self.workingDir.get(),'pack_manifest.json'), 'w+') as outfile:
@@ -137,7 +139,7 @@ class mainWindow:
                 os.mkdir(os.path.join(self.workingDir.get(),"texts"))
             except:
                 pass
-            self.LangPack.append("skinpack.SSP= "+self.packName.get())
+            self.LangPack.append("skinpack."+self.PackLanName+"= "+self.packName.get())
             with open(os.path.join(self.workingDir.get(),"texts","en_us.lang"),"w+") as outfile:
                 for L in self.LangPack:
                     outfile.writelines(L)
@@ -149,6 +151,7 @@ class mainWindow:
                     file=file.replace(os.path.join(self.workingDir.get(),""),"")
                     print(file)
                     zip.write(file)
+            self.PackLanName=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
     def get_all_file_paths(self,directory): 
   
         # initializing empty file paths list 
@@ -177,7 +180,7 @@ class mainWindow:
         root.wait_window(w.top)
         self.addButton["state"] = "normal"
         if len(name.get())>0 and len(path.get())>0:
-            self.LangPack.append("skin.SSP."+name.get().replace(' ',"")+"= "+name.get()+"\n")
+            self.LangPack.append("skin."+self.PackLanName+"."+name.get().replace(' ',"")+"= "+name.get()+"\n")
             self.skins.append({
                 "localization_name":name.get().replace(' ',""),
                 "geometry":"geometry.humanoid.custom",
