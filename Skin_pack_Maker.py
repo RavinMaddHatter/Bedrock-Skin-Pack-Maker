@@ -93,7 +93,7 @@ class mainWindow:
         r+=1
         self.delButton=Button(self.master, text="Delete",command=self.deleteSkin ).grid(row=r,column=5)
         r+=1
-        self.loadButton=Button(self.master, text="import",command=self.loadOldPack ).grid(row=r,column=5)
+        self.loadButton=Button(self.master, text="Import",command=self.loadOldPack ).grid(row=r,column=5)
         r+=1
         self.delButton=Button(self.master, text="Export",command=self.export ).grid(row=r,column=5)
     def browseWorkingDir(self):
