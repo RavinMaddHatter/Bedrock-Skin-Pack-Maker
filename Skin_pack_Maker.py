@@ -21,16 +21,17 @@ lang={}
     
 
 class skinDialog:
-    def __init__(self,master,nameVar,pictureFileVar):
+    def __init__(self,master,nameVar,pictureFileVar,thinSkin):
         top=self.top=Toplevel(master)
         rt=0
         self.l=Label(top,text="Name",justify=LEFT).grid(row=rt,column=1)
         Entry(master=top,textvariable=nameVar,width=37,borderwidth=1).grid(row=rt,column=2,columnspan=2)
         rt+=1
-        self.l=Label(top,text="file",justify=LEFT).grid(row=rt,column=1)
+        self.l=Label(top,text="File",justify=LEFT).grid(row=rt,column=1)
         Entry(top,textvariable=pictureFileVar,width=30,borderwidth=1).grid(row=rt,column=2)
         Button(top,text="Browse",command=lambda: self.browseSkin(pictureFileVar)).grid(row=rt,column=3)
         rt+=1
+        Checkbutton(top, text="Thin Skin", variable=thinSkin).grid(row=rt,column=2)
         Button(top,text='Done',command=self.cleanup).grid(row=rt,column=3)
     def browseSkin(self,pathVar):
         pathVar.set(askopenfilename(master=self.top, title="Browse for Skin",filetypes =(("Skin File", "*.png"),
@@ -239,15 +240,22 @@ class mainWindow:
         
         name=StringVar()
         path=StringVar()
-        w=skinDialog(root,name,path)
+        thinSkin=IntVar()
+        w=skinDialog(root,name,path,thinSkin)
         self.addButton["state"]="disabled"
         root.wait_window(w.top)
         self.addButton["state"] = "normal"
+        
+        
         if len(name.get())>0 and len(path.get())>0:
+            if thinSkin.get()==0:
+                skinGeometry="geometry.humanoid.custom"
+            else:
+                skinGeometry="geometry.humanoid.customSlim"
             self.LangPack.append("skin."+self.PackLanName+"."+name.get().replace(' ',"")+"= "+name.get()+"\n")
             self.skins.append({
                 "localization_name":name.get().replace(' ',""),
-                "geometry":"geometry.humanoid.custom",
+                "geometry":skinGeometry,
                 "texture":os.path.basename(path.get()),
                 "type":"free"
                 })
